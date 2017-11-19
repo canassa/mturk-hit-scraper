@@ -21,10 +21,15 @@
                         </div>
                         <div class="brand-text brand-sm"><strong class="text-primary">H</strong><strong>S</strong></div>
                     </a>
-                    <button class="sidebar-toggle"><i class="fa fa-long-arrow-left"></i></button>
+                    <button class="sidebar-toggle top-button">
+                        <i class="fa fa-long-arrow-left"></i>
+                    </button>
+                    <button @click.prevent="togglePause" class="top-button">
+                        <i class="fa" :class="{'fa-pause': !paused, 'fa-play': paused}"></i>
+                    </button>
                 </div>
                 <ul class="right-menu list-inline no-margin-bottom">
-                    <li class="list-inline-item">Next refresh in {{ timeLeft }}</li>
+                    <li class="list-inline-item">{{ nextRefreshIn }}</li>
 <!--                     <li class="list-inline-item dropdown">
                         <a id="navbarDropdownMenuLink1" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link messages-toggle">
                             <i class="fa fa-envelope-o"></i><span class="badge dashbg-1">5</span>
@@ -85,9 +90,25 @@
             timeLeft: {
                 type: Number,
                 required: true
+            },
+            paused: {
+                type: Boolean,
+                required: true
+            }
+        },
+        computed: {
+            nextRefreshIn() {
+                if (this.paused) {
+                    return 'Paused';
+                }
+                return 'Next refresh in ' + this.timeLeft;
             }
         },
         methods: {
+            togglePause() {
+                console.log('togglePause');
+                this.$emit('togglePause');
+            },
             exit() {
                 console.log('reload');
                 window.location.reload();

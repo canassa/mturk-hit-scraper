@@ -1,6 +1,11 @@
 <template>
     <div>
-        <page-header :time-left="timeLeft"></page-header>
+        <page-header
+            :time-left="timeLeft"
+            :paused="paused"
+            @togglePause="togglePause">
+
+        </page-header>
         <div class="d-flex align-items-stretch">
             <nav id="sidebar">
                 <div class="sidebar-header d-flex align-items-center">
@@ -83,6 +88,7 @@ export default {
             hits: [],
             seenHits: new Set(),
             currentState: 'hits',
+            paused: true,
             state: {
                 settings: {
                     title: 'Settings'
@@ -104,6 +110,9 @@ export default {
             this.bubbleHits = settings.bubbleHits;
             this.sortBy = settings.sortBy;
             this.currentState = 'hits';
+        },
+        togglePause() {
+            this.paused = !this.paused;
         },
         fetchHits(firstFetch=false) {
             console.log('fetchHits');
@@ -166,18 +175,28 @@ export default {
         console.log('mounted');
         this.fetchHits(true);
         this.clock = setInterval(() => {
+            if (this.paused) {
+                return;
+            }
             this.timeLeft--;
-            console.log('tickClock', this.timeLeft);
             if (this.timeLeft <= 0) {
                 this.timeLeft = this.fetchInterval;
                 this.fetchHits();
             }
 
         }, 1000);
+
+        window.addEventListener('keydown', e => {
+            if (e.keyCode == 80) {
+                this.togglePause();
+                e.stopPropagation();
+            }
+        });
     },
     beforeDestroy() {
         console.log('beforeDestroy');
         clearInterval(this.clock);
+        window.removeEventListener('keydown');
     },
 }
 </script>

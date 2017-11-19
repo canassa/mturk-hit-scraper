@@ -337,7 +337,7 @@ nav.navbar {
   z-index: 9998;
 }
 
-nav.navbar .sidebar-toggle {
+nav.navbar .top-button {
   width: 36px;
   height: 36px;
   line-height: 29px;
@@ -595,7 +595,7 @@ nav.navbar .dropdown .dropdown-menu.active {
     display: block;
     width: 100%;
   }
-  nav.navbar .sidebar-toggle {
+  nav.navbar .top-button {
     width: 30px;
     height: 30px;
     line-height: 25px;
@@ -614,7 +614,7 @@ nav.navbar .dropdown .dropdown-menu.active {
   nav.navbar .brand-text.brand-sm {
     display: block !important;
   }
-  nav.navbar .sidebar-toggle {
+  nav.navbar .top-button {
     -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
   }
