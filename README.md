@@ -22,6 +22,12 @@ npm run build
     // Remove CSS
     document.querySelector('link').remove();
 
+    // Load Font Awesome
+    var fa = d.createElement('link');
+    fa.href = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+    fa.rel = 'stylesheet'
+    d.getElementsByTagName('head')[0].appendChild(fa);
+
     // Add Vue.js anchor
     document.body.innerHTML = '<div id="app"></div>';
 

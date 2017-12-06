@@ -64,6 +64,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    Block list
+                                    <br>
+                                    <small class="text-primary">This HITs will be hidden from the main list</small>
+                                </label>
+                                <div class="col-sm-9">
+                                    <div v-for="(block, i) in blockList">
+                                        <a href="" @click.prevent="removeBlock(i)"><i class="fa fa-trash-o"></i></a> {{ printBlock(block) }}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="line"></div>
                             <div class="line"></div>
                             <div class="form-group row">
@@ -106,6 +118,10 @@
             initialSortBy: {
                 type: String,
                 required: true
+            },
+            initialBlockList: {
+                type: Array,
+                required: true
             }
         },
         data() {
@@ -115,10 +131,22 @@
                 fetchInterval: this.initialFetchInterval,
                 minReward: this.initialMinReward,
                 bubbleHits: this.initialBubbleHits,
-                sortBy: this.initialSortBy
+                sortBy: this.initialSortBy,
+                blockList: this.initialBlockList
             }
         },
         methods: {
+            removeBlock(index) {
+                console.log('removeBlock', index);
+                this.blockList.splice(index, 1);
+            },
+            printBlock(block) {
+                let type = {
+                    requester_id: 'Requester',
+                    hit_set_id: 'HIT',
+                }
+                return `${type[block.attr]}: "${block.human}"`
+            },
             save() {
                 console.log('save');
                 this.$emit('save', {
@@ -127,7 +155,8 @@
                     fetchInterval: this.fetchInterval,
                     minReward: this.minReward,
                     bubbleHits: this.bubbleHits,
-                    sortBy: this.sortBy
+                    sortBy: this.sortBy,
+                    blockList: this.initialBlockList
                 });
             },
             cancel() {
