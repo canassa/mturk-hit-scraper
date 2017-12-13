@@ -87,6 +87,8 @@ export default {
             pageSize = 20
         } = jsonSettings;
 
+        pageSize = parseInt(pageSize, 10);
+
         return {
             // Settings
             username: localStorage['username'],

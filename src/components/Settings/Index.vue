@@ -1,9 +1,36 @@
 <template>
     <div class="container-fluid">
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="block">
                     <div class="block-body">
+
+
+                        <!-- Modal-->
+                        <div id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                          <div role="document" class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <strong id="exampleModalLabel" class="modal-title">Settings export</strong>
+                                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div class="form-group">
+                                    <label>Copy the settings and save somewhere</label>
+                                    <textarea id="json-settings" v-model="getSettings" class="form-control" ></textarea>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                                <button type="button" data-dismiss="modal" @click.prevent="copySettings" class="btn btn-secondary">Copy to clipboard</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                         <form class="form-horizontal">
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Pays at least</label>
@@ -29,7 +56,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Page size</label>
                                 <div class="col-sm-9 select">
-                                    <select v-model="pageSize" class="form-control">
+                                    <select v-model.number="pageSize" class="form-control">
                                         <option value="10">10</option>
                                         <option value="20">20</option>
                                         <option value="30">30</option>
@@ -100,6 +127,8 @@
                                 <div class="col-sm-9 ml-auto">
                                     <button @click.prevent="cancel" class="btn btn-secondary">Cancel</button>
                                     <button @click.prevent="save" class="btn btn-primary">Save changes</button>
+
+                                    <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-secondary pull-right">Export settings</button>
                                 </div>
                             </div>
                         </form>
@@ -158,6 +187,20 @@
                 pageSize: this.initialPageSize
             }
         },
+        computed: {
+            getSettings() {
+                return JSON.stringify({
+                    qualifiedToWork: this.qualifiedToWork,
+                    requireMasters: this.requireMasters,
+                    fetchInterval: this.fetchInterval,
+                    minReward: this.minReward,
+                    bubbleHits: this.bubbleHits,
+                    sortBy: this.sortBy,
+                    blockList: this.blockList,
+                    pageSize: this.pageSize
+                });
+            }
+        },
         methods: {
             removeBlock(index) {
                 console.log('removeBlock', index);
@@ -169,6 +212,12 @@
                     hit_set_id: 'HIT',
                 }
                 return `${type[block.attr]}: "${block.human}"`
+            },
+            copySettings() {
+                document.getElementById('json-settings').select();
+                document.execCommand("copy");
+
+                console.log('copySettings');
             },
             save() {
                 console.log('save');
