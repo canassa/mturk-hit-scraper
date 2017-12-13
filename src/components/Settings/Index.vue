@@ -7,8 +7,8 @@
                     <div class="block-body">
 
 
-                        <!-- Modal-->
-                        <div id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                        <!-- Export modal-->
+                        <div id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                           <div role="document" class="modal-dialog">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -24,12 +24,36 @@
                                 </form>
                               </div>
                               <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
                                 <button type="button" data-dismiss="modal" @click.prevent="copySettings" class="btn btn-secondary">Copy to clipboard</button>
                               </div>
                             </div>
                           </div>
                         </div>
+
+                        <!-- Import modal-->
+                        <div id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                          <div role="document" class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <strong id="exampleModalLabel" class="modal-title">Settings import</strong>
+                                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div class="form-group">
+                                    <label>Paste the settings here</label>
+                                    <textarea id="json-settings" v-model="newSettings" class="form-control" ></textarea>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                                <button type="button" data-dismiss="modal" @click.prevent="importSettings" class="btn btn-secondary">Import</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
 
                         <form class="form-horizontal">
                             <div class="form-group row">
@@ -128,7 +152,8 @@
                                     <button @click.prevent="cancel" class="btn btn-secondary">Cancel</button>
                                     <button @click.prevent="save" class="btn btn-primary">Save changes</button>
 
-                                    <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-secondary pull-right">Export settings</button>
+                                    <button type="button" data-toggle="modal" data-target="#exportModal" class="btn btn-secondary pull-right">Export settings</button>
+                                    <button type="button" data-toggle="modal" data-target="#importModal" class="btn btn-secondary pull-right">Import settings</button>
                                 </div>
                             </div>
                         </form>
@@ -184,7 +209,9 @@
                 bubbleHits: this.initialBubbleHits,
                 sortBy: this.initialSortBy,
                 blockList: this.initialBlockList,
-                pageSize: this.initialPageSize
+                pageSize: this.initialPageSize,
+
+                newSettings: '',
             }
         },
         computed: {
@@ -212,6 +239,19 @@
                     hit_set_id: 'HIT',
                 }
                 return `${type[block.attr]}: "${block.human}"`
+            },
+            importSettings() {
+                const newSettings = JSON.parse(this.newSettings);
+                this.newSettings = '';
+
+                this.qualifiedToWork = newSettings.qualifiedToWork;
+                this.requireMasters = newSettings.requireMasters;
+                this.fetchInterval = newSettings.fetchInterval;
+                this.minReward = newSettings.minReward;
+                this.bubbleHits = newSettings.bubbleHits;
+                this.sortBy = newSettings.sortBy;
+                this.blockList = newSettings.blockList;
+                this.pageSize = newSettings.pageSize;
             },
             copySettings() {
                 document.getElementById('json-settings').select();
