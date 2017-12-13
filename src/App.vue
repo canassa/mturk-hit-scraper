@@ -42,6 +42,7 @@
                               :initial-bubble-hits="bubbleHits"
                               :initial-sort-by="sortBy"
                               :initial-block-list="blockList"
+                              :initial-page-size="pageSize"
                               @cancel="currentState = 'hits'"
                               @save="saveSettings"></settings>
                 </section>
@@ -82,7 +83,8 @@ export default {
             minReward = 0.6,
             bubbleHits = true,
             sortBy = 'num_hits_desc',
-            blockList = []
+            blockList = [],
+            pageSize = 20
         } = jsonSettings;
 
         return {
@@ -95,6 +97,7 @@ export default {
             bubbleHits,
             sortBy,
             blockList,
+            pageSize,
 
             // Other
             timeLeft: 5,
@@ -131,7 +134,8 @@ export default {
                 'minReward',
                 'bubbleHits',
                 'sortBy',
-                'blockList'
+                'blockList',
+                'pageSize'
             ];
             let jsonSetting = {};
 
@@ -154,12 +158,10 @@ export default {
             this.paused = !this.paused;
         },
         block(blockData) {
-            console.log(blockData);
             this.blockList.push(blockData);
             this.saveToLocalStorage();
         },
         fetchHits(firstFetch=false) {
-            console.log('fetchHits');
             var bla = [1,2,3,4,5,6].map(i => {
                 return {
                     hit_set_id: i + '',
@@ -175,7 +177,7 @@ export default {
             axios.get('/', {
                 headers: {'X-Requested-With': 'XMLHttpRequest'},
                 params: {
-                    'page_size': 20,
+                    'page_size': this.pageSize,
                     'page_number': 1,
                     'filters[qualified]': this.qualifiedToWork,
                     'filters[masters]': this.requireMasters,
@@ -187,6 +189,8 @@ export default {
                 // let newHits = newHits || bla;
                 let foundNew = false;
                 // let hitsIds = new Set(this.hits.map(h => h.hit_set_id));
+
+                console.log(newHits.length);
 
                 newHits = newHits.filter((h) => {
                     for (let i=0; i<this.blockList.length; i++) {
@@ -219,7 +223,6 @@ export default {
                 }
 
                 // this.hits = response.data.results || bla;
-                // console.log(this.hits);
             }).catch((error) => {
                 console.log(error);
             });
@@ -227,7 +230,6 @@ export default {
         }
     },
     mounted() {
-        console.log('mounted');
         this.fetchHits(true);
         this.clock = setInterval(() => {
             if (this.paused) {
@@ -245,7 +247,6 @@ export default {
         window.addEventListener('keydown', this.handleP);
     },
     beforeDestroy() {
-        console.log('beforeDestroy');
         clearInterval(this.clock);
         window.removeEventListener('keydown', this.handleP);
     },

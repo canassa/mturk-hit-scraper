@@ -27,6 +27,24 @@
                             </div>
                             <div class="line"></div>
                             <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Page size</label>
+                                <div class="col-sm-9 select">
+                                    <select v-model="pageSize" class="form-control">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                        <option value="60">60</option>
+                                        <option value="70">70</option>
+                                        <option value="80">80</option>
+                                        <option value="90">90</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Sort by</label>
                                 <div class="col-sm-9 select">
                                     <select v-model="sortBy" class="form-control" name="sort">
@@ -122,7 +140,11 @@
             initialBlockList: {
                 type: Array,
                 required: true
-            }
+            },
+            initialPageSize: {
+                type: Number,
+                required: true
+            },
         },
         data() {
             return {
@@ -132,7 +154,8 @@
                 minReward: this.initialMinReward,
                 bubbleHits: this.initialBubbleHits,
                 sortBy: this.initialSortBy,
-                blockList: this.initialBlockList
+                blockList: this.initialBlockList,
+                pageSize: this.initialPageSize
             }
         },
         methods: {
@@ -156,7 +179,8 @@
                     minReward: this.minReward,
                     bubbleHits: this.bubbleHits,
                     sortBy: this.sortBy,
-                    blockList: this.initialBlockList
+                    blockList: this.blockList,
+                    pageSize: this.pageSize
                 });
             },
             cancel() {
