@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg">
             <div class="search-panel">
                 <div class="search-inner d-flex align-items-center justify-content-center">
-                    <div class="close-btn">Close <i class="fa fa-close"></i></div>
+                    <div class="close-btn">Close <i class="fa fa-close"/></div>
                     <form id="searchForm" action="#">
                         <div class="form-group">
                             <input type="search" name="search" placeholder="What are you searching for...">
@@ -22,15 +22,15 @@
                         <div class="brand-text brand-sm"><strong class="text-primary">H</strong><strong>S</strong></div>
                     </a>
                     <button class="sidebar-toggle top-button">
-                        <i class="fa fa-long-arrow-left"></i>
+                        <i class="fa fa-long-arrow-left"/>
                     </button>
                     <button @click.prevent="togglePause" class="top-button">
-                        <i class="fa" :class="{'fa-pause': !paused, 'fa-play': paused}"></i>
+                        <i class="fa" :class="{'fa-pause': !paused, 'fa-play': paused}"/>
                     </button>
                 </div>
                 <ul class="right-menu list-inline no-margin-bottom">
                     <li class="list-inline-item">{{ nextRefreshIn }}</li>
-<!--                     <li class="list-inline-item dropdown">
+                    <!--                     <li class="list-inline-item dropdown">
                         <a id="navbarDropdownMenuLink1" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link messages-toggle">
                             <i class="fa fa-envelope-o"></i><span class="badge dashbg-1">5</span>
                         </a>
@@ -75,7 +75,13 @@
                         </ul>
                     </li> -->
                     <li class="list-inline-item logout">
-                        <a id="logout" @click.prevent="exit" href="#" class="nav-link">Exit <i class="fa fa-sign-out"></i></a>
+                        <a
+                            id="logout"
+                            @click.prevent="exit"
+                            href="#"
+                            class="nav-link">
+                            Exit <i class="fa fa-sign-out"/>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -106,11 +112,9 @@
         },
         methods: {
             togglePause() {
-                console.log('togglePause');
                 this.$emit('togglePause');
             },
             exit() {
-                console.log('reload');
                 window.location.reload();
             }
         }

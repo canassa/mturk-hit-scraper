@@ -6,52 +6,83 @@
                 <div class="block">
                     <div class="block-body">
 
-
                         <!-- Export modal-->
-                        <div id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-                          <div role="document" class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <strong id="exampleModalLabel" class="modal-title">Settings export</strong>
-                                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-                              </div>
-                              <div class="modal-body">
-                                <form>
-                                  <div class="form-group">
-                                    <label>Copy the settings and save somewhere</label>
-                                    <textarea id="json-settings" v-model="getSettings" class="form-control" ></textarea>
-                                  </div>
-                                </form>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" @click.prevent="copySettings" class="btn btn-secondary">Copy to clipboard</button>
-                              </div>
+                        <div
+                            id="exportModal"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="exampleModalLabel"
+                            aria-hidden="true"
+                            class="modal fade text-left">
+                            <div role="document" class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <strong id="exampleModalLabel" class="modal-title">Settings export</strong>
+                                        <button
+                                            type="button"
+                                            data-dismiss="modal"
+                                            aria-label="Close"
+                                            class="close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label>Copy the settings and save somewhere</label>
+                                                <textarea id="json-settings" v-model="getSettings" class="form-control" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            data-dismiss="modal"
+                                            @click.prevent="copySettings"
+                                            class="btn btn-secondary">Copy to clipboard</button>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
 
                         <!-- Import modal-->
-                        <div id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-                          <div role="document" class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <strong id="exampleModalLabel" class="modal-title">Settings import</strong>
-                                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-                              </div>
-                              <div class="modal-body">
-                                <form>
-                                  <div class="form-group">
-                                    <label>Paste the settings here</label>
-                                    <textarea id="json-settings" v-model="newSettings" class="form-control" ></textarea>
-                                  </div>
-                                </form>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
-                                <button type="button" data-dismiss="modal" @click.prevent="importSettings" class="btn btn-secondary">Import</button>
-                              </div>
+                        <div
+                            id="importModal"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="exampleModalLabel"
+                            aria-hidden="true"
+                            class="modal fade text-left">
+                            <div role="document" class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <strong id="exampleModalLabel" class="modal-title">Settings import</strong>
+                                        <button
+                                            type="button"
+                                            data-dismiss="modal"
+                                            aria-label="Close"
+                                            class="close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label>Paste the settings here</label>
+                                                <textarea id="json-settings" v-model="newSettings" class="form-control" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                                        <button
+                                            type="button"
+                                            data-dismiss="modal"
+                                            @click.prevent="importSettings"
+                                            class="btn btn-secondary">Import</button>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
 
 
@@ -59,24 +90,38 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Pays at least</label>
                                 <div class="input-group col-sm-9"><span class="input-group-addon">$</span>
-                                    <input v-model.number="minReward" type="number" min="0.0" placeholder="0.5" step="0.01" class="form-control">
+                                    <input
+                                        v-model.number="minReward"
+                                        type="number"
+                                        min="0.0"
+                                        placeholder="0.5"
+                                        step="0.01"
+                                        class="form-control">
                                 </div>
                             </div>
-                            <div class="line"></div>
+                            <div class="line"/>
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">HITs that</label>
                                 <div class="col-sm-9">
                                     <div class="i-checks">
-                                        <input v-model="qualifiedToWork" id="checkboxCustom1" type="checkbox" class="checkbox-template">
+                                        <input
+                                            v-model="qualifiedToWork"
+                                            id="checkboxCustom1"
+                                            type="checkbox"
+                                            class="checkbox-template">
                                         <label for="checkboxCustom1">I'm qualified to work on</label>
                                     </div>
                                     <div class="i-checks">
-                                        <input v-model="requireMasters" id="checkboxCustom2" type="checkbox" class="checkbox-template">
+                                        <input
+                                            v-model="requireMasters"
+                                            id="checkboxCustom2"
+                                            type="checkbox"
+                                            class="checkbox-template">
                                         <label for="checkboxCustom2">Require Master Qualification</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="line"></div>
+                            <div class="line"/>
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Page size</label>
                                 <div class="col-sm-9 select">
@@ -94,7 +139,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="line"></div>
+                            <div class="line"/>
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Sort by</label>
                                 <div class="col-sm-9 select">
@@ -117,7 +162,12 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Auto-refresh delay</label>
                                 <div class="input-group col-sm-9"><span class="input-group-addon">sec</span>
-                                    <input v-model.number="fetchInterval" type="number" min="1" step="1" class="form-control">
+                                    <input
+                                        v-model.number="fetchInterval"
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -128,7 +178,11 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="i-checks">
-                                        <input v-model="bubbleHits" id="checkboxCustom1" type="checkbox" class="checkbox-template">
+                                        <input
+                                            v-model="bubbleHits"
+                                            id="checkboxCustom1"
+                                            type="checkbox"
+                                            class="checkbox-template">
                                         <label for="checkboxCustom1">Enable</label>
                                     </div>
                                 </div>
@@ -140,20 +194,38 @@
                                     <small class="text-primary">This HITs will be hidden from the main list</small>
                                 </label>
                                 <div class="col-sm-9">
-                                    <div v-for="(block, i) in blockList">
-                                        <a href="" @click.prevent="removeBlock(i)"><i class="fa fa-trash-o"></i></a> {{ printBlock(block) }}
+                                    <div
+                                        v-for="(block, i) in blockList"
+                                        :key="`${block.attr}-${block.value}`">
+                                        <a
+                                            href=""
+                                            @click.prevent="removeBlock(i)">
+                                            <i class="fa fa-trash-o"/>
+                                        </a> {{ printBlock(block) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="line"></div>
-                            <div class="line"></div>
+                            <div class="line"/>
+                            <div class="line"/>
                             <div class="form-group row">
                                 <div class="col-sm-9 ml-auto">
                                     <button @click.prevent="cancel" class="btn btn-secondary">Cancel</button>
                                     <button @click.prevent="save" class="btn btn-primary">Save changes</button>
 
-                                    <button type="button" data-toggle="modal" data-target="#exportModal" class="btn btn-secondary pull-right">Export settings</button>
-                                    <button type="button" data-toggle="modal" data-target="#importModal" class="btn btn-secondary pull-right">Import settings</button>
+                                    <button
+                                        type="button"
+                                        data-toggle="modal"
+                                        data-target="#exportModal"
+                                        class="btn btn-secondary pull-right">
+                                        Export settings
+                                    </button>
+                                    <button
+                                        type="button"
+                                        data-toggle="modal"
+                                        data-target="#importModal"
+                                        class="btn btn-secondary pull-right">
+                                        Import settings
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -165,6 +237,8 @@
 </template>
 
 <script>
+    import cloneDeep from 'lodash/cloneDeep';
+
     export default {
         props: {
             initialQualifiedToWork: {
@@ -208,7 +282,7 @@
                 minReward: this.initialMinReward,
                 bubbleHits: this.initialBubbleHits,
                 sortBy: this.initialSortBy,
-                blockList: this.initialBlockList,
+                blockList: cloneDeep(this.initialBlockList),
                 pageSize: this.initialPageSize,
 
                 newSettings: '',
@@ -230,7 +304,6 @@
         },
         methods: {
             removeBlock(index) {
-                console.log('removeBlock', index);
                 this.blockList.splice(index, 1);
             },
             printBlock(block) {
@@ -256,11 +329,8 @@
             copySettings() {
                 document.getElementById('json-settings').select();
                 document.execCommand("copy");
-
-                console.log('copySettings');
             },
             save() {
-                console.log('save');
                 this.$emit('save', {
                     qualifiedToWork: this.qualifiedToWork,
                     requireMasters: this.requireMasters,
@@ -273,7 +343,6 @@
                 });
             },
             cancel() {
-                console.log('cancel');
                 this.$emit('cancel');
             }
         }

@@ -3,14 +3,12 @@
         <page-header
             :time-left="timeLeft"
             :paused="paused"
-            @togglePause="togglePause">
-
-        </page-header>
+            @togglePause="togglePause"/>
         <div class="d-flex align-items-stretch">
             <nav id="sidebar">
                 <div class="sidebar-header d-flex align-items-center">
                     <div class="avatar">
-                        <!-- <img src="img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle"> -->
+                    <!-- <img src="img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle"> -->
                     </div>
                     <div class="title">
                         <h1 class="h5">{{ username }}</h1>
@@ -19,10 +17,10 @@
                 <span class="heading">Main</span>
                 <ul class="list-unstyled">
                     <li :class="{active: currentState == 'hits'}">
-                        <a href="#" @click.prevent="currentState = 'hits'"><i class="fa fa-th"></i>HITs</a>
+                        <a href="#" @click.prevent="currentState = 'hits'"><i class="fa fa-th"/>HITs</a>
                     </li>
                     <li :class="{active: currentState == 'settings'}">
-                        <a href="#" @click.prevent="currentState = 'settings'"><i class="fa fa-cog"></i>Settings</a>
+                        <a href="#" @click.prevent="currentState = 'settings'"><i class="fa fa-cog"/>Settings</a>
                     </li>
                 </ul>
             </nav>
@@ -33,18 +31,23 @@
                     </div>
                 </div>
                 <section class="no-padding-top">
-                    <hits v-if="currentState == 'hits'" :hits="hits" @block="block"></hits>
-                    <settings v-if="currentState == 'settings'"
-                              :initial-qualified-to-work="qualifiedToWork"
-                              :initial-require-masters="requireMasters"
-                              :initial-fetch-interval="fetchInterval"
-                              :initial-min-reward="minReward"
-                              :initial-bubble-hits="bubbleHits"
-                              :initial-sort-by="sortBy"
-                              :initial-block-list="blockList"
-                              :initial-page-size="pageSize"
-                              @cancel="currentState = 'hits'"
-                              @save="saveSettings"></settings>
+                    <hits
+                        v-if="currentState == 'hits'"
+                        :hits="hits"
+                        @block="block"
+                        @markAsViewed="markAsViewed"/>
+                    <settings
+                        v-if="currentState == 'settings'"
+                        :initial-qualified-to-work="qualifiedToWork"
+                        :initial-require-masters="requireMasters"
+                        :initial-fetch-interval="fetchInterval"
+                        :initial-min-reward="minReward"
+                        :initial-bubble-hits="bubbleHits"
+                        :initial-sort-by="sortBy"
+                        :initial-block-list="blockList"
+                        :initial-page-size="pageSize"
+                        @cancel="currentState = 'hits'"
+                        @save="saveSettings"/>
                 </section>
             </div>
         </div>
@@ -67,7 +70,7 @@ import PageHeader from './components/PageHeader/PageHeader.vue';
 import axios from 'axios';
 
 export default {
-    name: 'app',
+    name: 'App',
     components: {
         Hits,
         PageHeader,
@@ -84,7 +87,8 @@ export default {
             bubbleHits = true,
             sortBy = 'num_hits_desc',
             blockList = [],
-            pageSize = 20
+            pageSize = 20,
+            // viewedHits = {}
         } = jsonSettings;
 
         pageSize = parseInt(pageSize, 10);
@@ -116,6 +120,31 @@ export default {
                 }
             }
         };
+    },
+    watch: {
+        blockList() {
+        }
+    },
+    mounted() {
+        this.fetchHits(true);
+        this.clock = setInterval(() => {
+            if (this.paused) {
+                return;
+            }
+            this.timeLeft--;
+            if (this.timeLeft <= 0) {
+                this.timeLeft = this.fetchInterval;
+                this.fetchHits();
+            }
+
+        }, 1000);
+
+        // Toogle pause when 'P' is pressed
+        window.addEventListener('keydown', this.handleP);
+    },
+    beforeDestroy() {
+        clearInterval(this.clock);
+        window.removeEventListener('keydown', this.handleP);
     },
     methods: {
         saveSettings(settings) {
@@ -163,13 +192,14 @@ export default {
             this.blockList.push(blockData);
             this.saveToLocalStorage();
         },
+        markAsViewed(bla) {
+        },
         fetchHits(firstFetch=false) {
             var bla = [1,2,3,4,5,6].map(i => {
                 return {
                     hit_set_id: i + '',
                     requester_name: "Michael Schwalbe",
                     requester_id: "A2YTQTCXVDV7BG",
-                    hit_set_id: "3SIEQXXS7GX6B805REE24R62VOFQ4B",
                     title: "By Invitation Only: Follow-Up Survey",
                     assignable_hits_count: 89,
                     accept_project_task_url: '/projects/3BG0QG8YO7YP1E2FVKAGIGB3M6FSC4/tasks/accept_random?ref=w_pl_prvw',
@@ -187,12 +217,10 @@ export default {
                     'filters[min_reward]': this.minReward
                 }
             }).then(response => {
-                let newHits = response.data.results;
-                // let newHits = newHits || bla;
+                // let newHits = response.data.results;
+                let newHits = newHits || bla;
                 let foundNew = false;
                 // let hitsIds = new Set(this.hits.map(h => h.hit_set_id));
-
-                console.log(newHits.length);
 
                 newHits = newHits.filter((h) => {
                     for (let i=0; i<this.blockList.length; i++) {
@@ -226,32 +254,11 @@ export default {
 
                 // this.hits = response.data.results || bla;
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
 
         }
-    },
-    mounted() {
-        this.fetchHits(true);
-        this.clock = setInterval(() => {
-            if (this.paused) {
-                return;
-            }
-            this.timeLeft--;
-            if (this.timeLeft <= 0) {
-                this.timeLeft = this.fetchInterval;
-                this.fetchHits();
-            }
-
-        }, 1000);
-
-        // Toogle pause when 'P' is pressed
-        window.addEventListener('keydown', this.handleP);
-    },
-    beforeDestroy() {
-        clearInterval(this.clock);
-        window.removeEventListener('keydown', this.handleP);
-    },
+    }
 }
 </script>
 
