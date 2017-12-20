@@ -3,13 +3,12 @@
         <page-header
             :time-left="timeLeft"
             :paused="paused"
-            @togglePause="togglePause"/>
+            @togglePause="togglePause"
+        />
         <div class="d-flex align-items-stretch">
             <nav id="sidebar">
                 <div class="sidebar-header d-flex align-items-center">
-                    <div class="avatar">
-                    <!-- <img src="img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle"> -->
-                    </div>
+                    <div class="avatar"/>
                     <div class="title">
                         <h1 class="h5">{{ username }}</h1>
                     </div>
@@ -17,10 +16,20 @@
                 <span class="heading">Main</span>
                 <ul class="list-unstyled">
                     <li :class="{active: currentState == 'hits'}">
-                        <a href="#" @click.prevent="currentState = 'hits'"><i class="fa fa-th"/>HITs</a>
+                        <a
+                            href="#"
+                            @click.prevent="currentState = 'hits'"
+                        >
+                            <i class="fa fa-th"/>HITs
+                        </a>
                     </li>
                     <li :class="{active: currentState == 'settings'}">
-                        <a href="#" @click.prevent="currentState = 'settings'"><i class="fa fa-cog"/>Settings</a>
+                        <a
+                            href="#"
+                            @click.prevent="currentState = 'settings'"
+                        >
+                            <i class="fa fa-cog"/>Settings
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -31,11 +40,13 @@
                     </div>
                 </div>
                 <section class="no-padding-top">
-                    <hits
+                    <hit-list
                         v-if="currentState == 'hits'"
                         :hits="hits"
+                        :opened-hits="openedHits"
                         @block="block"
-                        @markAsViewed="markAsViewed"/>
+                        @markAsOpened="markAsOpened"
+                    />
                     <settings
                         v-if="currentState == 'settings'"
                         :initial-qualified-to-work="qualifiedToWork"
@@ -47,7 +58,8 @@
                         :initial-block-list="blockList"
                         :initial-page-size="pageSize"
                         @cancel="currentState = 'hits'"
-                        @save="saveSettings"/>
+                        @save="saveSettings"
+                    />
                 </section>
             </div>
         </div>
@@ -64,7 +76,7 @@ import notification_uri from './assets/notification.mp3';
 
 const NOTIFICATION = new Audio(notification_uri);
 
-import Hits from './components/Hits/Hits.vue';
+import HitList from './components/Hits/HitList.vue';
 import Settings from './components/Settings';
 import PageHeader from './components/PageHeader/PageHeader.vue';
 import axios from 'axios';
@@ -72,7 +84,7 @@ import axios from 'axios';
 export default {
     name: 'App',
     components: {
-        Hits,
+        HitList,
         PageHeader,
         Settings
     },
@@ -88,7 +100,7 @@ export default {
             sortBy = 'num_hits_desc',
             blockList = [],
             pageSize = 20,
-            // viewedHits = {}
+            openedHits = {}
         } = jsonSettings;
 
         pageSize = parseInt(pageSize, 10);
@@ -104,6 +116,7 @@ export default {
             sortBy,
             blockList,
             pageSize,
+            openedHits,
 
             // Other
             timeLeft: 5,
@@ -121,10 +134,14 @@ export default {
             }
         };
     },
-    watch: {
-        blockList() {
-        }
-    },
+    // watch: {
+    //     qualifiedToWork() {
+    //         console.log('qualifiedToWork')
+    //     },
+    //     blockList() {
+    //         console.log('blockList')
+    //     }
+    // },
     mounted() {
         this.fetchHits(true);
         this.clock = setInterval(() => {
@@ -166,7 +183,8 @@ export default {
                 'bubbleHits',
                 'sortBy',
                 'blockList',
-                'pageSize'
+                'pageSize',
+                'openedHits'
             ];
             let jsonSetting = {};
 
@@ -192,7 +210,9 @@ export default {
             this.blockList.push(blockData);
             this.saveToLocalStorage();
         },
-        markAsViewed(bla) {
+        markAsOpened(hitSetId) {
+            this.$set(this.openedHits, hitSetId, true);
+            this.saveToLocalStorage();
         },
         fetchHits(firstFetch=false) {
             var bla = [1,2,3,4,5,6].map(i => {
@@ -217,11 +237,10 @@ export default {
                     'filters[min_reward]': this.minReward
                 }
             }).then(response => {
-                // let newHits = response.data.results;
-                let newHits = newHits || bla;
+                let newHits = response.data.results;
+                // let newHits = newHits || bla;
                 let foundNew = false;
                 // let hitsIds = new Set(this.hits.map(h => h.hit_set_id));
-
                 newHits = newHits.filter((h) => {
                     for (let i=0; i<this.blockList.length; i++) {
                         let block = this.blockList[i];
@@ -253,9 +272,10 @@ export default {
                 }
 
                 // this.hits = response.data.results || bla;
-            }).catch((error) => {
-                // console.log(error);
-            });
+            })
+            // .catch((error) => {
+            //     console.log(error);
+            // });
 
         }
     }

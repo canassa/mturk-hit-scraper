@@ -19,7 +19,9 @@
                             <strong class="text-primary">HIT</strong>
                             <strong>Scraper</strong>
                         </div>
-                        <div class="brand-text brand-sm"><strong class="text-primary">H</strong><strong>S</strong></div>
+                        <div class="brand-text brand-sm">
+                            <strong class="text-primary">H</strong><strong>S</strong>
+                        </div>
                     </a>
                     <button class="sidebar-toggle top-button">
                         <i class="fa fa-long-arrow-left"/>
@@ -79,7 +81,8 @@
                             id="logout"
                             @click.prevent="exit"
                             href="#"
-                            class="nav-link">
+                            class="nav-link"
+                        >
                             Exit <i class="fa fa-sign-out"/>
                         </a>
                     </li>
